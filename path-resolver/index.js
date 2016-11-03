@@ -4,7 +4,7 @@ var SemVer = require('semver');
 var path = require('path');
 
 var baseFrom = function (options) {
-  return path.join(options.basePath || 'js', options.name.toLowerCase());
+  return path.join(options.remoteBasePath || 'js', options.name.toLowerCase());
 };
 
 var fullFrom = function (options) {
