@@ -1,11 +1,10 @@
 'use strict';
 
-var Rx = require('rx');
 var SemVer = require('semver');
 var path = require('path');
 
 var baseFrom = function (options) {
-  return path.join('js', options.name.toLowerCase());
+  return path.join(options.basePath || 'js', options.name.toLowerCase());
 };
 
 var fullFrom = function (options) {
@@ -22,7 +21,7 @@ var majorMinorFrom = function (options) {
 
 var snapshotFrom = function (options) {
   var base = baseFrom(options);
-  return path.join(base, 'development');
+  return path.join(base, options.snapshotName || 'development');
 };
 
 var all = function (options) {
@@ -38,19 +37,11 @@ var all = function (options) {
     versions.push(snapshotFrom(options));
   }
 
-  return Rx.Observable.from(versions);
-};
-
-var full = function (options) {
-  return Rx.Observable.just(fullFrom(options));
-};
-
-var snapshot = function (options) {
-  return Rx.Observable.just(snapshotFrom(options));
+  return versions;
 };
 
 module.exports = {
   all: all,
-  full: full,
-  snapshot: snapshot
+  full: fullFrom,
+  snapshot: snapshotFrom
 };

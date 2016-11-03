@@ -9,6 +9,7 @@
   "author": "Auth0",
   "license": "MIT",
   "dependencies": {
+    "request": "^2.78.0",
     "rx": "^4.1.0",
     "s3": "^4.4.0",
     "semver": "^5.3.0"

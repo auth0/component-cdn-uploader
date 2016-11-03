@@ -1,50 +1,61 @@
 'use strict';
 
-var resolver = require('./path_resolver');
+var resolver = require('./path-resolver');
 var aws = require('./aws');
+var purge = require('./purge');
 var path = require('path');
 var Rx = require('rx');
+var just = Rx.Observable.just;
+var from = Rx.Observable.from;
+var request = require('request');
 
-var options = {
-  name: 'lock',
-  version: '10.4.1',
-  path: 'test-resources',
-  main: 'lock.min.js',
-  bucket: 'hzalaz',
-  majorAndMinor: true,
-  snapshot: true
+var exists = function (options) {
+  return Rx.Observable.create(function (observer) {
+    console.log(`Checking if ${options.checkUrl} exists`);
+    request.delete(options.checkUrl, function (error, response, body) {
+      if(error) {
+        observer.onNext(false);
+      } else {
+        observer.onNext(response.statusCode == 200);
+      }
+      observer.onCompleted()
+    });
+  });
 };
 
-resolver
-.full(options)
-.flatMap(function (base) {
-  return aws.exists(path.join(base, options.main), options.bucket);
-})
-.tapOnNext(function (exists) {
-  if(exists) {
-    console.warn(`File ${options.main} exists for version ${options.version}`);
-  }
-})
-.flatMap(function(exist) {
-  var version;
-  if(exist) {
-    version = resolver.snapshot(options);
-  } else {
-    version = resolver.all(options);
-  }
-
-  return version
-  .map(function (remotePath) {
-    return aws.uploader(remotePath, options);
+module.exports = function (options) {
+  just(resolver.full(options))
+  .flatMap(function () {
+    return exists(options);
   })
-  .concatAll()
-  .tap(
-    function (file) {
-      console.log(`uploading file ${file}`);
-    },
-    function (error) {
-      console.error('unable to sync:', error.stack);
+  .tapOnNext(function (exists) {
+    if(exists) {
+      console.warn(`File ${options.main} exists for version ${options.version}`);
     }
-  );
-})
-.subscribe();
+  })
+  .flatMap(function(exist) {
+    var version;
+    if(exist) {
+      console.log(`About to update snapshot version ${options.snapshotName}`);
+      version = just(resolver.snapshot(options));
+    } else {
+      console.log(`About to release version ${options.version}`);
+      version = from(resolver.all(options));
+    }
+
+    return version
+    .map(function (remotePath) {
+      return aws.uploader(remotePath, options).concat(purge(remotePath));
+    })
+    .concatAll()
+    .tap(
+      function (file) {
+        console.log(`Uploading file ${file}`);
+      },
+      function (error) {
+        console.error('Unable to sync:', error.stack);
+      }
+    );
+  })
+  .subscribe();
+};
