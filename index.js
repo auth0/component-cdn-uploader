@@ -12,7 +12,7 @@ var request = require('request');
 var exists = function (options) {
   return Rx.Observable.create(function (observer) {
     console.log(`Checking if ${options.checkUrl} exists`);
-    request.delete(options.checkUrl, function (error, response, body) {
+    request.delete(options.checkUrl, function (error, response) {
       if(error) {
         observer.onNext(false);
       } else {

@@ -1,17 +1,8 @@
 'use strict';
 
 var upload = require('../');
+var fs = require('fs');
 
-var options = {
-  name: 'lock',
-  version: '10.4.1',
-  checkUrl: 'https://cdn.auth0.com/js/lock/10.4.1/lock.min.js',
-  localPath: 'test-resources',
-  bucket: 'hzalaz',
-  remoteBasePath: 'js',
-  majorAndMinor: true,
-  snapshot: true,
-  snapshotName: 'development'
-};
+var pkg = JSON.parse(fs.readFileSync('./package.json'), 'utf8');
 
-upload(options);
+upload(pkg["auth0-uploader"]);
