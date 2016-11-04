@@ -5,14 +5,15 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "cdn": "node node_modules/component-cdn-uploader/cli/index.js"
+    "cdn": "ccu"
   },
   "author": "",
   "license": "ISC",
   "auth0-uploader": {
     "name": "lock",
     "version": "10.4.1",
-    "checkUrl": "https://cdn.auth0.com/js/lock/10.4.1/lock.min.js",
+    "cdn": "https://cdn.auth0.com",
+    "mainBundleFile": "lock.min.js",
     "localPath": "test-resources",
     "bucket": "hzalaz",
     "remoteBasePath": "js",
