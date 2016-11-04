@@ -3,8 +3,10 @@
 'use strict';
 
 var upload = require('../');
+var from = require('../configuration');
+
 var fs = require('fs');
 
 var pkg = JSON.parse(fs.readFileSync('./package.json'), 'utf8');
 
-upload(pkg["auth0-uploader"]);
+upload(from(pkg));
