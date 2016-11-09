@@ -4,16 +4,22 @@ var url = require('url');
 var path = require('path');
 var Rx = require('rx');
 var request = require('request');
+var logger = require('../logger');
 
 var purge = function (path) {
   var location = url.resolve(this.root, path);
   return Rx.Observable.create(function (observer) {
-    console.log(`Purging ${location}...`);
+    logger.info(`Purging ${location}...`);
     request.delete(location, function (error, response, body) {
       if(error) {
-        console.error(`Failed purge ${location}`, error);
+        logger.error(`Failed purge ${location}`, error);
       } else {
-        console.log(body);
+        if (response.statusCode >= 400) {
+          logger.error(`Failed to purge ${location} with status code ${response.statusCode}`);
+          logger.info(body);
+        } else {
+          logger.info(body);
+        }
       }
       observer.onCompleted()
     });
@@ -24,7 +30,7 @@ var exists = function (remote) {
   var base = path.join(remote, this.mainFile);
   var location = url.resolve(this.root, base);
   return Rx.Observable.create(function (observer) {
-    console.log(`Checking if file at ${location} exists`);
+    logger.info(`Checking if file at ${location} exists`);
     request.head(location, function (error, response) {
       if(error) {
         observer.onNext(false);
