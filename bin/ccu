@@ -4,9 +4,27 @@
 
 var upload = require('../');
 var from = require('../configuration');
+var meow = require('meow');
+
+var cli = meow(`
+  Usage
+  $ ccu <dir to upload>
+  
+  Options
+    --full-version-only Only upload full version or snapshot.
+  
+  Examples
+  $ ccu dist
+`, {
+  boolean: ['fullVersionOnly']
+});
 
 var fs = require('fs');
-
 var pkg = JSON.parse(fs.readFileSync('./package.json'), 'utf8');
 
-upload(from(pkg));
+var options = from(pkg);
+options.localPath = cli.input[0] || options.localPath;
+options.majorAndMinor = !cli.flags.fullVersionOnly;
+
+console.log(options);
+upload(options);
