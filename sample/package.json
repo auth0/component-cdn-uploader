@@ -9,7 +9,7 @@
   },
   "author": "",
   "license": "ISC",
-  "cdn-uploader": {
+  "cdn-component": {
     "name": "lock",
     "version": "10.4.1",
     "cdn": "https://cdn.auth0.com",

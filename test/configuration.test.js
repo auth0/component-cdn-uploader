@@ -16,7 +16,7 @@ describe('configuration', function () {
     var json = {
       name: "component",
       version: "1.2.3",
-      "cdn-uploader": {
+      "cdn-component": {
         cdn: "https://cdn.auth0.com",
         mainBundleFile: "lock.min.js",
         bucket: "hzalaz",
@@ -40,7 +40,7 @@ describe('configuration', function () {
     var json = {
       name: "component",
       version: "1.2.3",
-      "cdn-uploader": {
+      "cdn-component": {
         name: "auth0-component",
         cdn: "https://cdn.auth0.com",
         mainBundleFile: "lock.min.js",
@@ -54,7 +54,7 @@ describe('configuration', function () {
     var json = {
       name: "component",
       version: "1.2.3",
-      "cdn-uploader": {
+      "cdn-component": {
         snapshotName: "latest",
         cdn: "https://cdn.auth0.com",
         mainBundleFile: "lock.min.js",
@@ -68,7 +68,7 @@ describe('configuration', function () {
     var json = {
       name: "component",
       version: "1.2.3",
-      "cdn-uploader": {
+      "cdn-component": {
         snapshotName: "latest",
         cdn: "https://cdn.auth0.com",
         mainBundleFile: "lock.min.js",
@@ -83,7 +83,7 @@ describe('configuration', function () {
     var json = {
       name: "component",
       version: "1.2.3",
-      "cdn-uploader": {
+      "cdn-component": {
         localPath: "build",
         cdn: "https://cdn.auth0.com",
         mainBundleFile: "lock.min.js",
@@ -98,7 +98,7 @@ describe('configuration', function () {
     var json = {
       name: "component",
       version: "1.2.3",
-      "cdn-uploader": {
+      "cdn-component": {
         snapshot: false,
         cdn: "https://cdn.auth0.com",
         mainBundleFile: "lock.min.js",
@@ -112,7 +112,7 @@ describe('configuration', function () {
     var json = {
       name: "component",
       version: "1.2.3",
-      "cdn-uploader": {
+      "cdn-component": {
         majorAndMinor: false,
         cdn: "https://cdn.auth0.com",
         mainBundleFile: "lock.min.js",

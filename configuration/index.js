@@ -1,10 +1,10 @@
 'use strict';
 
 module.exports = function (pkgInfo) {
-  if (pkgInfo == null || pkgInfo['cdn-uploader'] == null) {
+  if (pkgInfo == null || pkgInfo['cdn-component'] == null) {
     throw 'Missing configuration options from package.json';
   }
-  var config = pkgInfo['cdn-uploader'];
+  var config = pkgInfo['cdn-component'];
   return {
     name: config.name || pkgInfo.name,
     version: pkgInfo.version,
