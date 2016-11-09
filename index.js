@@ -2,32 +2,14 @@
 
 var resolver = require('./path-resolver');
 var aws = require('./aws');
-var purge = require('./purge');
-var path = require('path');
+var CDN = require('./cdn');
 var Rx = require('rx');
 var just = Rx.Observable.just;
 var from = Rx.Observable.from;
-var request = require('request');
-
-var exists = function (options) {
-  return Rx.Observable.create(function (observer) {
-    console.log(`Checking if ${options.checkUrl} exists`);
-    request.delete(options.checkUrl, function (error, response) {
-      if(error) {
-        observer.onNext(false);
-      } else {
-        observer.onNext(response.statusCode == 200);
-      }
-      observer.onCompleted()
-    });
-  });
-};
 
 module.exports = function (options) {
-  just(resolver.full(options))
-  .flatMap(function () {
-    return exists(options);
-  })
+  var cdn = new CDN(options);
+  cdn.exists(resolver.full(options))
   .tapOnNext(function (exists) {
     if(exists) {
       console.warn(`File ${options.main} exists for version ${options.version}`);
@@ -45,7 +27,7 @@ module.exports = function (options) {
 
     return version
     .map(function (remotePath) {
-      return aws.uploader(remotePath, options).concat(purge(remotePath));
+      return aws.uploader(remotePath, options).concat(cdn.purge(remotePath));
     })
     .concatAll()
     .tap(

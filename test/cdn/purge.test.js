@@ -1,9 +1,10 @@
 'use strict';
 
 var nock = require('nock');
-var purge = require('../purge');
+var CDN = require('../../cdn')
+var cdn = new CDN({cdn: 'https://cdn.auth0.com'});
 
-describe('purge', function () {
+describe('cdn.purge', function () {
 
   before(function () {
     nock.disableNetConnect();
@@ -15,20 +16,20 @@ describe('purge', function () {
   });
 
   it('should purge with url', function(done) {
-    var cdn = nock('https://cdn.auth0.com').delete('/lock/1.2.3/').reply(200);
-    purge('lock/1.2.3/')
+    var purge = nock('https://cdn.auth0.com').delete('/lock/1.2.3/').reply(200);
+    cdn.purge('lock/1.2.3/')
     .tapOnCompleted(function () {
-      cdn.done();
+      purge.done();
       done();
     })
     .subscribe();
   });
 
   it('should always send completed', function(done) {
-    var cdn = nock('https://cdn.auth0.com').delete('/lock/1.2.3/').reply(404);
-    purge('lock/1.2.3/')
+    var purge = nock('https://cdn.auth0.com').delete('/lock/1.2.3/').reply(404);
+    cdn.purge('lock/1.2.3/')
     .tapOnCompleted(function () {
-      cdn.done();
+      purge.done();
       done();
     })
     .subscribe();
