@@ -11,6 +11,7 @@ module.exports = function (pkgInfo) {
     localPath: config.localPath || 'dist',
     remoteBasePath: config.remoteBasePath || 'js',
     bucket: config.bucket,
+    region: config.region,
     cdn: config.cdn,
     mainBundleFile: config.mainBundleFile,
     majorAndMinor: config.majorAndMinor !== false,

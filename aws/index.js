@@ -2,9 +2,30 @@
 
 var Rx = require('rx');
 var s3 = require('s3');
-var client = s3.createClient({});
+
+// Singleton so only one S3 client is used.
+var getClient = (function () {
+  function createS3Client(region) {
+    return s3.createClient({
+      s3Options: {
+        region: region
+      }
+    });
+  }
+  var instance = null;
+  return {
+    setRegion: function(region) {
+      if (instance === null) {
+        instance = createS3Client(region);
+      }
+      return instance;
+    }
+  };
+})();
 
 var uploader = function (remotePath, options) {
+  var client = getClient.setRegion(options.region);
+
   return Rx.Observable.create(function (observer) {
     var params = {
       localDir: options.localPath,
