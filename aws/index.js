@@ -2,9 +2,14 @@
 
 var Rx = require('rx');
 var s3 = require('s3');
-var client = s3.createClient({});
+
+var client = null;
 
 var uploader = function (remotePath, options) {
+  if (client === null) {
+    client = createS3Client(options.region);
+  }
+
   return Rx.Observable.create(function (observer) {
     var params = {
       localDir: options.localPath,
@@ -31,3 +36,11 @@ var uploader = function (remotePath, options) {
 module.exports = {
   uploader: uploader
 };
+
+function createS3Client(region) {
+  return s3.createClient({
+    s3Options: {
+      region: region
+    }
+  });
+}
