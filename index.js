@@ -18,7 +18,11 @@ module.exports = function (options) {
   })
   .flatMap(function(exist) {
     var version;
-    if(exist) {
+    if (exist && !options.snapshot) {
+      return Rx.Observable.empty;
+    }
+
+    if(exist || options.snapshotOnly) {
       logger.info(`About to update snapshot version ${options.snapshotName}`);
       version = just(resolver.snapshot(options));
     } else {
@@ -35,7 +39,7 @@ module.exports = function (options) {
       function (file) {
         logger.info(`Uploading file ${file}`);
       },
-      function (error) {
+      function  (error) {
         logger.error('Unable to sync:', error.stack);
       },
       function () {

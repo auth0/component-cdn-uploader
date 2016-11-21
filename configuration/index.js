@@ -15,7 +15,7 @@ module.exports = function (pkgInfo) {
     mainBundleFile: config.mainBundleFile,
     majorAndMinor: config.majorAndMinor !== false,
     snapshot: config.snapshot !== false,
-    snapshotName: config.snapshotName || 'development'
-
+    snapshotName: config.snapshotName || 'development',
+    snapshotOnly: config.snapshotOnly === true
   };
 };

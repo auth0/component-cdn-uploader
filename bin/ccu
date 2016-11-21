@@ -26,5 +26,4 @@ var options = from(pkg);
 options.localPath = cli.input[0] || options.localPath;
 options.majorAndMinor = !cli.flags.fullVersionOnly;
 
-console.log(options);
 upload(options);
