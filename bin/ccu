@@ -24,6 +24,7 @@ var pkg = JSON.parse(fs.readFileSync('./package.json'), 'utf8');
 
 var options = from(pkg);
 options.localPath = cli.input[0] || options.localPath;
-options.majorAndMinor = !cli.flags.fullVersionOnly;
+options.majorAndMinor = options.majorAndMinor && !cli.flags.fullVersionOnly;
+options.snapshot = options.snapshot && !cli.flags.fullVersionOnly;
 
 upload(options);
