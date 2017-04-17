@@ -7,32 +7,33 @@ var Rx = require('rx');
 var just = Rx.Observable.just;
 var from = Rx.Observable.from;
 var logger = require('./logger');
+var extend = require('util')._extend;
 
 module.exports = function (options) {
   var cdn = new CDN(options);
-  cdn.exists(resolver.full(options))
+  cdn.exists(resolver.full(options).remotePath)
   .tapOnNext(function (exists) {
     if(exists) {
       logger.warn(`File ${options.mainBundleFile} exists for version ${options.version}`);
     }
   })
   .flatMap(function(exist) {
-    var version;
+    var list;
     if (exist && !options.snapshot) {
       return Rx.Observable.empty;
     }
 
     if(exist || options.snapshotOnly) {
       logger.info(`About to update snapshot version ${options.snapshotName}`);
-      version = just(resolver.snapshot(options));
+      list = just(resolver.snapshot(options));
     } else {
       logger.info(`About to release version ${options.version}`);
-      version = from(resolver.all(options));
+      list = from(resolver.all(options));
     }
 
-    return version
-    .map(function (remotePath) {
-      return aws.uploader(remotePath, options).concat(cdn.purge(remotePath));
+    return list
+    .map(function (version) {
+      return aws.uploader(version, options).concat(cdn.purge(version.remotePath));
     })
     .concatAll()
     .tap(

@@ -26,8 +26,8 @@ describe('uploader', function () {
 
   it('should upload snapshot only', function (done) {
     var aws = {
-      uploader: function (remotePath, opts) {
-        expect(remotePath).to.eql('js/component/development');
+      uploader: function (version, opts) {
+        expect(version.remotePath).to.eql('js/component/development');
         expect(opts).to.eql(options);
         return Rx.Observable.just('lock.js');
       }
@@ -49,8 +49,8 @@ describe('uploader', function () {
 
   it('should upload snapshot only even if it doesn\'t exist', function (done) {
     var aws = {
-      uploader: function (remotePath, opts) {
-        expect(remotePath).to.eql('js/component/development');
+      uploader: function (version, opts) {
+        expect(version.remotePath).to.eql('js/component/development');
         expect(opts).to.eql(options);
         return Rx.Observable.just('lock.js');
       }
@@ -73,8 +73,8 @@ describe('uploader', function () {
 
   it('should not upload snapshot', function () {
     var aws = {
-      uploader: function (remotePath) {
-        expect.fail(remotePath, 'Should not upload any file to path');
+      uploader: function (version) {
+        expect.fail(version.remotePath, 'Should not upload any file to path');
       }
     };
     var alwaysExist = function () {
@@ -93,8 +93,8 @@ describe('uploader', function () {
 
   it('should upload full version', function (done) {
     var aws = {
-      uploader: function (remotePath, opts) {
-        expect(remotePath).to.eql('js/component/1.2.3');
+      uploader: function (version, opts) {
+        expect(version.remotePath).to.eql('js/component/1.2.3');
         expect(opts).to.eql(options);
         return Rx.Observable.just('lock.js');
       }

@@ -11,7 +11,9 @@ describe('path-resolver', function () {
       version: '1.2.3'
     };
 
-    expect(resolver.full(options)).to.equal('js/lock/1.2.3');
+    var full = resolver.full(options);
+    expect(full.remotePath).to.equal('js/lock/1.2.3');
+    expect(full.cache).to.equal('max-age=86400,public');
   });
 
   it('should return full version path for custom base', function () {
@@ -21,7 +23,9 @@ describe('path-resolver', function () {
       remoteBasePath: 'styleguide'
     };
 
-    expect(resolver.full(options)).to.equal('styleguide/styleguide/1.2.3');
+    var full = resolver.full(options);
+    expect(full.remotePath).to.equal('styleguide/styleguide/1.2.3');
+    expect(full.cache).to.equal('max-age=86400,public');
   });
 
   it('should return snapshot version path', function () {
@@ -29,7 +33,9 @@ describe('path-resolver', function () {
       name: 'lock',
     };
 
-    expect(resolver.snapshot(options)).to.equal('js/lock/development');
+    var snapshot = resolver.snapshot(options);
+    expect(snapshot.remotePath).to.equal('js/lock/development');
+    expect(snapshot.cache).to.equal('max-age=0');
   });
 
   it('should return snapshot version path for custom base', function () {
@@ -39,7 +45,9 @@ describe('path-resolver', function () {
       snapshotName: 'latest'
     };
 
-    expect(resolver.snapshot(options)).to.equal('styleguide/styleguide/latest');
+    var snapshot = resolver.snapshot(options);
+    expect(snapshot.remotePath).to.equal('styleguide/styleguide/latest');
+    expect(snapshot.cache).to.equal('max-age=0');
   });
 
   it('should return only full version path', function () {
@@ -50,7 +58,9 @@ describe('path-resolver', function () {
       majorAndMinor: false
     };
 
-    expect(resolver.all(options)).to.eql(['js/lock/1.2.3']);
+    var all = resolver.all(options);
+    expect(all[0].remotePath).to.equal('js/lock/1.2.3');
+    expect(all[0].cache).to.equal('max-age=86400,public');
   });
 
   it('should return all version path', function () {
@@ -61,7 +71,9 @@ describe('path-resolver', function () {
       majorAndMinor: true
     };
 
-    expect(resolver.all(options)).to.eql(['js/lock/1.2.3', 'js/lock/1.2', 'js/lock/development']);
+    var all = resolver.all(options);
+    expect(all.map(function(version) { return version.remotePath; })).to.eql(['js/lock/1.2.3', 'js/lock/1.2', 'js/lock/development']);
+    expect(all.map(function(version) { return version.cache; })).to.eql(['max-age=86400,public', 'max-age=10800,public', 'max-age=0']);
   });
 
   it('should skip snapshot version', function () {
@@ -72,7 +84,9 @@ describe('path-resolver', function () {
       majorAndMinor: true
     };
 
-    expect(resolver.all(options)).to.eql(['js/lock/1.2.3', 'js/lock/1.2']);
+    var all = resolver.all(options);
+    expect(all.map(function(version) { return version.remotePath; })).to.eql(['js/lock/1.2.3', 'js/lock/1.2']);
+    expect(all.map(function(version) { return version.cache; })).to.eql(['max-age=86400,public', 'max-age=10800,public']);
   });
 
   it('should skip major and minor only', function () {
@@ -83,7 +97,9 @@ describe('path-resolver', function () {
       majorAndMinor: false
     };
 
-    expect(resolver.all(options)).to.eql(['js/lock/1.2.3', 'js/lock/development']);
+    var all = resolver.all(options);
+    expect(all.map(function(version) { return version.remotePath; })).to.eql(['js/lock/1.2.3', 'js/lock/development']);
+    expect(all.map(function(version) { return version.cache; })).to.eql(['max-age=86400,public', 'max-age=0']);
   });
 
 });

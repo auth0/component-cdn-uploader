@@ -4,14 +4,15 @@ var Rx = require('rx');
 var s3 = require('s3');
 var client = s3.createClient({});
 
-var uploader = function (remotePath, options) {
+var uploader = function (version, options) {
   return Rx.Observable.create(function (observer) {
     var params = {
       localDir: options.localPath,
       deleteRemoved: false,
       s3Params: {
         Bucket: options.bucket,
-        Prefix: remotePath
+        Prefix: version.remotePath,
+        CacheControl: version.cache
       }
     };
     var uploader = client.uploadDir(params);

@@ -27,7 +27,7 @@ describe('aws', function () {
   });
 
   it('should return observable', function () {
-    expect(uploader('lock/1.2.3', options)).to.be.instanceOf(Rx.Observable);
+    expect(uploader({remotePath: 'lock/1.2.3', cache: 'max-age=0'}, options)).to.be.instanceOf(Rx.Observable);
   });
 
   it('should start upload with correct params', function (done) {
@@ -36,15 +36,16 @@ describe('aws', function () {
       expect(params.deleteRemoved).to.be.false;
       expect(params.s3Params.Bucket).to.eql(options.bucket);
       expect(params.s3Params.Prefix).to.eql('lock/1.2.3');
+      expect(params.s3Params.CacheControl).to.eql('max-age=0');
       done();
       return new events.EventEmitter();
     };
-    uploader('lock/1.2.3', options).subscribe();
+    uploader({remotePath: 'lock/1.2.3', cache: 'max-age=0'}, options).subscribe();
   });
 
   it('should relay errors', function (done) {
     var expected = new Error('MOCK');
-    uploader('lock/1.2.3', options)
+    uploader({remotePath: 'lock/1.2.3', cache: 'max-age=0'}, options)
     .tapOnError(function (error) {
       expect(error).to.eql(expected);
       done();
@@ -54,7 +55,7 @@ describe('aws', function () {
   });
 
   it('should relay file upload started', function (done) {
-    uploader('lock/1.2.3', options)
+    uploader({remotePath: 'lock/1.2.3', cache: 'max-age=0'}, options)
     .tapOnNext(function (file) {
       expect(file).to.eql('lock.js');
       done();
@@ -64,7 +65,7 @@ describe('aws', function () {
   });
 
   it('should complete stream when upload ends', function (done) {
-    uploader('lock/1.2.3', options)
+    uploader({remotePath: 'lock/1.2.3', cache: 'max-age=0'}, options)
     .tapOnCompleted(function () {
       done();
     })
