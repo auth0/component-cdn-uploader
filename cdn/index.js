@@ -12,10 +12,10 @@ var purge = function (path) {
     logger.info(`Purging ${location}...`);
     request.delete(location, function (error, response, body) {
       if(error) {
-        logger.error(`Failed purge ${location}`, error);
+        logger.warn(`Failed purge ${location}`, error);
       } else {
         if (response.statusCode >= 400) {
-          logger.error(`Failed to purge ${location} with status code ${response.statusCode}`);
+          logger.warn(`Failed to purge ${location} with status code ${response.statusCode}`);
           logger.info(body);
         } else {
           logger.info(body);
