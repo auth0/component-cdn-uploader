@@ -10,7 +10,7 @@ var baseFrom = function (options) {
 var fullFrom = function (options) {
   var base = baseFrom(options);
   var version = SemVer.parse(options.version);
-  return { cache: 'max-age=86400,public', remotePath: path.join(base, version.raw) };
+  return { cache: 'max-age=2628000,public', remotePath: path.join(base, version.raw) };
 };
 
 var majorMinorFrom = function (options) {
