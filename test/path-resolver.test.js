@@ -13,7 +13,7 @@ describe('path-resolver', function () {
 
     var full = resolver.full(options);
     expect(full.remotePath).to.equal('js/lock/1.2.3');
-    expect(full.cache).to.equal('max-age=86400,public');
+    expect(full.cache).to.equal('max-age=2628000,public');
   });
 
   it('should return full version path for custom base', function () {
@@ -25,7 +25,7 @@ describe('path-resolver', function () {
 
     var full = resolver.full(options);
     expect(full.remotePath).to.equal('styleguide/styleguide/1.2.3');
-    expect(full.cache).to.equal('max-age=86400,public');
+    expect(full.cache).to.equal('max-age=2628000,public');
   });
 
   it('should return snapshot version path', function () {
@@ -60,7 +60,7 @@ describe('path-resolver', function () {
 
     var all = resolver.all(options);
     expect(all[0].remotePath).to.equal('js/lock/1.2.3');
-    expect(all[0].cache).to.equal('max-age=86400,public');
+    expect(all[0].cache).to.equal('max-age=2628000,public');
   });
 
   it('should return all version path', function () {
@@ -73,7 +73,7 @@ describe('path-resolver', function () {
 
     var all = resolver.all(options);
     expect(all.map(function(version) { return version.remotePath; })).to.eql(['js/lock/1.2.3', 'js/lock/1.2', 'js/lock/development']);
-    expect(all.map(function(version) { return version.cache; })).to.eql(['max-age=86400,public', 'max-age=10800,public', 'max-age=0']);
+    expect(all.map(function(version) { return version.cache; })).to.eql(['max-age=2628000,public', 'max-age=10800,public', 'max-age=0']);
   });
 
   it('should skip snapshot version', function () {
@@ -86,7 +86,7 @@ describe('path-resolver', function () {
 
     var all = resolver.all(options);
     expect(all.map(function(version) { return version.remotePath; })).to.eql(['js/lock/1.2.3', 'js/lock/1.2']);
-    expect(all.map(function(version) { return version.cache; })).to.eql(['max-age=86400,public', 'max-age=10800,public']);
+    expect(all.map(function(version) { return version.cache; })).to.eql(['max-age=2628000,public', 'max-age=10800,public']);
   });
 
   it('should skip major and minor only', function () {
@@ -99,7 +99,7 @@ describe('path-resolver', function () {
 
     var all = resolver.all(options);
     expect(all.map(function(version) { return version.remotePath; })).to.eql(['js/lock/1.2.3', 'js/lock/development']);
-    expect(all.map(function(version) { return version.cache; })).to.eql(['max-age=86400,public', 'max-age=0']);
+    expect(all.map(function(version) { return version.cache; })).to.eql(['max-age=2628000,public', 'max-age=0']);
   });
 
 });
