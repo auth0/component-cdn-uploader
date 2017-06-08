@@ -8,15 +8,32 @@ var meow = require('meow');
 
 var cli = meow(`
   Usage
-  $ ccu <dir to upload>
-  
-  Options
-    --full-version-only Only upload full version or snapshot.
-  
+  $ ccu [options] [directory ...]
+
+  options
+    --type (string) type of upload flow to perform (one of 'default', 'release', 'snapshot')
+    --only-full only upload full version, ignored if type is 'snapshot'
+    --dry perform a dry run
+    --snapshot-name (string) name used for snapshot. Default is 'development'
+    --silent run in silent mode
+    --trace run with verbose log
+
   Examples
   $ ccu dist
 `, {
-  boolean: ['fullVersionOnly']
+  string: ['type', 'snapshotName'],
+  boolean: ['dry', 'onlyFull', 'usePackage', 'silent', 'trace'],
+  alias: {
+    t: 'type',
+    n: 'snapshot-name',
+    d: 'dry',
+    f: 'only-full',
+    p: 'use-package'
+  },
+  default: {
+    type: 'default',
+    'snapshotName': 'development'
+  }
 });
 
 var fs = require('fs');
@@ -24,7 +41,17 @@ var pkg = JSON.parse(fs.readFileSync('./package.json'), 'utf8');
 
 var options = from(pkg);
 options.localPath = cli.input[0] || options.localPath;
-options.majorAndMinor = options.majorAndMinor && !cli.flags.fullVersionOnly;
-options.snapshot = options.snapshot && !cli.flags.fullVersionOnly;
+options.type = cli.flags.type;
+options.onlyFull = cli.flags.onlyFull;
+options.dry = cli.flags.dry;
+var levels = ['debug', 'info', 'warn', 'error', 'success']
+  .filter(function (value) {
+    if (cli.flags.silent) {
+      return false
+    }
+    return value !== 'debug' || cli.flags.trace;
+  });
+options.logLevels = levels;
+options.snapshotName = cli.flags.snapshotName || options.snapshotName;
 
 upload(options);

@@ -6,47 +6,34 @@ var CDN = require('./cdn');
 var Rx = require('rx');
 var just = Rx.Observable.just;
 var from = Rx.Observable.from;
-var logger = require('./logger');
+var Logger = require('./logger');
 var extend = require('util')._extend;
 
 module.exports = function (options) {
-  var cdn = new CDN(options);
-  cdn.exists(resolver.full(options).remotePath)
+  var logger = new Logger(options);
+  logger.info(`About to upload ${options.name}@${options.version} from '${options.localPath}' to '${options.remoteBasePath}'`);
+  logger.debug(`Starting upload process with parameters ${logger.pretty(options)}`);
+  var state = Object.assign({ logger: logger }, options);
+  var cdn = new CDN(state);
+  cdn.exists(resolver.full(state).remotePath)
   .tapOnNext(function (exists) {
     if(exists) {
-      logger.warn(`File ${options.mainBundleFile} exists for version ${options.version}`);
+      logger.warn(`File ${state.mainBundleFile} exists for version ${state.version}`);
     }
   })
   .flatMap(function(exist) {
-    var list;
-    if (exist && !options.snapshot) {
-      return Rx.Observable.empty;
-    }
-
-    if(exist || options.snapshotOnly) {
-      logger.info(`About to update snapshot version ${options.snapshotName}`);
-      list = just(resolver.snapshot(options));
-    } else {
-      logger.info(`About to release version ${options.version}`);
-      list = from(resolver.all(options));
-    }
-
-    return list
+    return from(resolver.for(state, exist))
     .map(function (version) {
-      return aws.uploader(version, options);
+      return aws.uploader(version, state);
     })
     .concatAll()
-    .tap(
-      function (file) {
-        logger.info(`Uploading file ${file}`);
-      },
-      function  (error) {
-        logger.error('Unable to sync:', error.stack);
-      },
-      function () {
-        logger.success(`Completed upload of ${options.name} to bucket ${options.bucket}`);
-      }
-    );
-  })
-  .subscribe();
+    .doOnNext(function (file) {
+      logger.info(`Uploading file ${file}`);
+    })
+    .doOnError(function (error) {
+      logger.error('Unable to upload:', error);
+    });
+  }).subscribeOnCompleted(function () {
+      logger.success(`Completed upload of ${state.name}@${state.version} to bucket ${state.bucket}`);
+  });
 };

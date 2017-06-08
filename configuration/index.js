@@ -13,9 +13,6 @@ module.exports = function (pkgInfo) {
     bucket: config.bucket,
     cdn: config.cdn,
     mainBundleFile: config.mainBundleFile,
-    majorAndMinor: config.majorAndMinor !== false,
-    snapshot: config.snapshot !== false,
-    snapshotName: config.snapshotName || 'development',
-    snapshotOnly: config.snapshotOnly === true
+    snapshotName: config.snapshotName || 'development'
   };
 };

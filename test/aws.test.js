@@ -5,11 +5,13 @@ var proxyrequire = require('proxyquire');
 var events = require('events');
 var s3 = {};
 var Rx = require('rx');
+var Logger = require('../logger');
 
 describe('aws', function () {
 
   var client, uploader, emitter;
-  var options = {localPath: 'build', bucket: 'auth0'};
+  var logger = new Logger({logLevels: []});
+  var options = {localPath: 'build', bucket: 'auth0', logger: logger};
 
   beforeEach(function () {
     emitter = new events.EventEmitter();

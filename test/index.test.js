@@ -18,73 +18,18 @@ describe('uploader', function () {
       bucket: 'hzalaz',
       cdn: 'https://cdn.auth0.com',
       mainBundleFile: 'lock.min.js',
-      majorAndMinor: false,
-      snapshot: true,
-      snapshotName: 'development'
+      type: 'default',
+      onlyMajor: false,
+      snapshotName: 'development',
+      logLevels: [],
     };
-  });
-
-  it('should upload snapshot only', function (done) {
-    var aws = {
-      uploader: function (version, opts) {
-        expect(version.remotePath).to.eql('js/component/development');
-        expect(opts).to.eql(options);
-        done();
-        return Rx.Observable.just('lock.js');
-      }
-    };
-    var alwaysExist = function () {
-      this.exists = function () {
-        return Rx.Observable.just(true);
-      };
-    };
-
-    var uploader = proxyrequire('../index', {'./aws': aws, './cdn': alwaysExist});
-    uploader(options);
-  });
-
-  it('should upload snapshot only even if it doesn\'t exist', function (done) {
-    var aws = {
-      uploader: function (version, opts) {
-        expect(version.remotePath).to.eql('js/component/development');
-        expect(opts).to.eql(options);
-        done();
-        return Rx.Observable.just('lock.js');
-      }
-    };
-    var alwaysExist = function () {
-      this.exists = function () {
-        return Rx.Observable.just(false);
-      };
-    };
-
-    var uploader = proxyrequire('../index', {'./aws': aws, './cdn': alwaysExist});
-    options.snapshotOnly = true;
-    uploader(options);
-  });
-
-  it('should not upload snapshot', function () {
-    var aws = {
-      uploader: function (version) {
-        expect.fail(version.remotePath, 'Should not upload any file to path');
-      }
-    };
-    var alwaysExist = function () {
-      this.exists = function () {
-        return Rx.Observable.just(true);
-      };
-    };
-
-    var uploader = proxyrequire('../index', {'./aws': aws, './cdn': alwaysExist});
-    options.snapshot = false;
-    uploader(options);
   });
 
   it('should upload full version', function (done) {
     var aws = {
-      uploader: function (version, opts) {
+      uploader: function (version, actual) {
         expect(version.remotePath).to.eql('js/component/1.2.3');
-        expect(opts).to.eql(options);
+        expect(actual).to.not.be.empty
         done();
         return Rx.Observable.just('lock.js');
       }

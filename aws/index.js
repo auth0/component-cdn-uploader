@@ -16,13 +16,16 @@ var uploader = function (version, options) {
       CacheControl: version.cache
     }
   };
+  var logger = options.logger;
   if (options.dry) {
     return Rx.Observable.create(function (observer) {
+      logger.debug(`Starting upload with following S3 config ${logger.pretty(params)}`);
       var workingDir = process.cwd();
       var walker = walk.walk(params.localDir, { followLinks: false });
       walker.on('file', function (root, stats, next) {
         var localPath = path.relative(workingDir, path.resolve(root, stats.name));
-        observer.onNext(localPath.replace(options.localPath, version.remotePath));
+        var file = localPath.replace(options.localPath, version.remotePath);
+        observer.next(file);
         next();
       });
       walker.on('error', function(root, stats, next) {
@@ -36,6 +39,7 @@ var uploader = function (version, options) {
     });
   }
   return Rx.Observable.create(function (observer) {
+    logger.debug(`Starting upload with following S3 config ${logger.pretty(params)}`);
     var uploader = client.uploadDir(params);
     uploader.on('error', function(err) {
       observer.onError(err);

@@ -30,10 +30,7 @@ describe('configuration', function () {
       bucket: 'hzalaz',
       cdn: 'https://cdn.auth0.com',
       mainBundleFile: 'lock.min.js',
-      majorAndMinor: true,
-      snapshot: true,
-      snapshotName: 'development',
-      snapshotOnly: false,
+      snapshotName: 'development'
     });
   });
 
@@ -93,49 +90,6 @@ describe('configuration', function () {
       }
     };
     expect(configuration(json).localPath).to.equal('build');
-  });
-
-  it('should allow to override snapshot', function () {
-    var json = {
-      name: "component",
-      version: "1.2.3",
-      "cdn-component": {
-        snapshot: false,
-        cdn: "https://cdn.auth0.com",
-        mainBundleFile: "lock.min.js",
-        bucket: "hzalaz",
-      }
-    };
-    expect(configuration(json).snapshot).to.be.false;
-  });
-
-  it('should allow to override major and minor', function () {
-    var json = {
-      name: "component",
-      version: "1.2.3",
-      "cdn-component": {
-        majorAndMinor: false,
-        cdn: "https://cdn.auth0.com",
-        mainBundleFile: "lock.min.js",
-        bucket: "hzalaz",
-      }
-    };
-    expect(configuration(json).majorAndMinor).to.be.false;
-  });
-
-  it('should allow to override snapshot only flag', function () {
-    var json = {
-      name: "component",
-      version: "1.2.3",
-      "cdn-component": {
-        name: "auth0-component",
-        cdn: "https://cdn.auth0.com",
-        mainBundleFile: "lock.min.js",
-        bucket: "hzalaz",
-        snapshotOnly: true
-      }
-    };
-    expect(configuration(json).snapshotOnly).to.be.true;
   });
 
 });
