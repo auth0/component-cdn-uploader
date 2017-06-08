@@ -16,7 +16,7 @@ describe('configuration', function () {
     var json = {
       name: "component",
       version: "1.2.3",
-      "cdn-component": {
+      "ccu": {
         cdn: "https://cdn.auth0.com",
         mainBundleFile: "lock.min.js",
         bucket: "hzalaz",
@@ -38,7 +38,7 @@ describe('configuration', function () {
     var json = {
       name: "component",
       version: "1.2.3",
-      "cdn-component": {
+      "ccu": {
         name: "auth0-component",
         cdn: "https://cdn.auth0.com",
         mainBundleFile: "lock.min.js",
@@ -52,7 +52,7 @@ describe('configuration', function () {
     var json = {
       name: "component",
       version: "1.2.3",
-      "cdn-component": {
+      "ccu": {
         snapshotName: "latest",
         cdn: "https://cdn.auth0.com",
         mainBundleFile: "lock.min.js",
@@ -66,7 +66,7 @@ describe('configuration', function () {
     var json = {
       name: "component",
       version: "1.2.3",
-      "cdn-component": {
+      "ccu": {
         snapshotName: "latest",
         cdn: "https://cdn.auth0.com",
         mainBundleFile: "lock.min.js",
@@ -81,7 +81,7 @@ describe('configuration', function () {
     var json = {
       name: "component",
       version: "1.2.3",
-      "cdn-component": {
+      "ccu": {
         localPath: "build",
         cdn: "https://cdn.auth0.com",
         mainBundleFile: "lock.min.js",

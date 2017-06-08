@@ -1,10 +1,10 @@
 'use strict';
 
 module.exports = function (pkgInfo) {
-  if (pkgInfo == null || pkgInfo['cdn-component'] == null) {
+  if (pkgInfo == null || pkgInfo['ccu'] == null) {
     throw 'Missing configuration options from package.json';
   }
-  var config = pkgInfo['cdn-component'];
+  var config = pkgInfo['ccu'];
   return {
     name: config.name || pkgInfo.name,
     version: pkgInfo.version,

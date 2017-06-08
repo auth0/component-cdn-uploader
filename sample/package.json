@@ -9,7 +9,7 @@
   },
   "author": "",
   "license": "ISC",
-  "cdn-component": {
+  "ccu": {
     "name": "lock",
     "cdn": "https://cdn.auth0.com",
     "mainBundleFile": "lock.min.js",
