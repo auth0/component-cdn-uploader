@@ -2,19 +2,40 @@
 
 var Rx = require('rx');
 var s3 = require('s3');
+var walk = require('walk');
+var path = require('path');
 var client = s3.createClient({});
 
 var uploader = function (version, options) {
+  var params = {
+    localDir: options.localPath,
+    deleteRemoved: false,
+    s3Params: {
+      Bucket: options.bucket,
+      Prefix: version.remotePath,
+      CacheControl: version.cache
+    }
+  };
+  if (options.dry) {
+    return Rx.Observable.create(function (observer) {
+      var workingDir = process.cwd();
+      var walker = walk.walk(params.localDir, { followLinks: false });
+      walker.on('file', function (root, stats, next) {
+        var localPath = path.relative(workingDir, path.resolve(root, stats.name));
+        observer.onNext(localPath.replace(options.localPath, version.remotePath));
+        next();
+      });
+      walker.on('error', function(root, stats, next) {
+        observer.onError(stats.error);
+        next();
+      });
+      walker.on('end', function() {
+        observer.onCompleted();
+      });
+      return function() {};
+    });
+  }
   return Rx.Observable.create(function (observer) {
-    var params = {
-      localDir: options.localPath,
-      deleteRemoved: false,
-      s3Params: {
-        Bucket: options.bucket,
-        Prefix: version.remotePath,
-        CacheControl: version.cache
-      }
-    };
     var uploader = client.uploadDir(params);
     uploader.on('error', function(err) {
       observer.onError(err);
