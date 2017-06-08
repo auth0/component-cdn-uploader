@@ -22,13 +22,12 @@ var cli = meow(`
   $ ccu dist
 `, {
   string: ['type', 'snapshotName'],
-  boolean: ['dry', 'onlyFull', 'usePackage', 'silent', 'trace'],
+  boolean: ['dry', 'onlyFull', 'silent', 'trace'],
   alias: {
     t: 'type',
     n: 'snapshot-name',
     d: 'dry',
-    f: 'only-full',
-    p: 'use-package'
+    f: 'only-full'
   },
   default: {
     type: 'default',
@@ -40,7 +39,7 @@ var fs = require('fs');
 var pkg = JSON.parse(fs.readFileSync('./package.json'), 'utf8');
 
 var options = from(pkg);
-options.localPath = cli.input[0] || options.localPath;
+options.localPaths = cli.input.length == 0 ? [options.localPath] : cli.input;
 options.type = cli.flags.type;
 options.onlyFull = cli.flags.onlyFull;
 options.dry = cli.flags.dry;

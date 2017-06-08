@@ -11,7 +11,7 @@ describe('aws', function () {
 
   var client, uploader, emitter;
   var logger = new Logger({logLevels: []});
-  var options = {localPath: 'build', bucket: 'auth0', logger: logger};
+  var options = {localPaths: ['build'], bucket: 'auth0', logger: logger};
 
   beforeEach(function () {
     emitter = new events.EventEmitter();
@@ -34,7 +34,7 @@ describe('aws', function () {
 
   it('should start upload with correct params', function (done) {
     client.uploadDir = function (params) {
-      expect(params.localDir).to.be.eql(options.localPath);
+      expect(params.localDir).to.be.eql(options.localPaths[0]);
       expect(params.deleteRemoved).to.be.false;
       expect(params.s3Params.Bucket).to.eql(options.bucket);
       expect(params.s3Params.Prefix).to.eql('lock/1.2.3');
@@ -42,12 +42,13 @@ describe('aws', function () {
       done();
       return new events.EventEmitter();
     };
-    uploader({remotePath: 'lock/1.2.3', cache: 'max-age=0'}, options).subscribe();
+    uploader({remotePath: 'lock/1.2.3', cache: 'max-age=0'}, options).concatAll().subscribe();
   });
 
   it('should relay errors', function (done) {
     var expected = new Error('MOCK');
     uploader({remotePath: 'lock/1.2.3', cache: 'max-age=0'}, options)
+    .concatAll()
     .tapOnError(function (error) {
       expect(error).to.eql(expected);
       done();
@@ -58,6 +59,7 @@ describe('aws', function () {
 
   it('should relay file upload started', function (done) {
     uploader({remotePath: 'lock/1.2.3', cache: 'max-age=0'}, options)
+    .concatAll()
     .tapOnNext(function (file) {
       expect(file).to.eql('lock.js');
       done();

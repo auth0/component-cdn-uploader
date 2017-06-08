@@ -112,6 +112,20 @@ describe('path-resolver', function () {
     expect(all.map(function(version) { return version.cache; })).to.eql(['max-age=0']);
   });
 
+  it('should return only snapshot on default mode when exists in cdn', function () {
+    var options = {
+      name: 'lock',
+      version: '1.2.3',
+      type: 'default',
+      onlyFull: false,
+      logger: logger
+    };
+
+    var all = resolver.for(options, true);
+    expect(all.map(function(version) { return version.remotePath; })).to.eql(['js/lock/development']);
+    expect(all.map(function(version) { return version.cache; })).to.eql(['max-age=0']);
+  });
+
   it('should skip snapshot version', function () {
     var options = {
       name: 'lock',

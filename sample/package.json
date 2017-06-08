@@ -11,14 +11,10 @@
   "license": "ISC",
   "cdn-component": {
     "name": "lock",
-    "version": "10.4.1",
     "cdn": "https://cdn.auth0.com",
     "mainBundleFile": "lock.min.js",
-    "localPath": "test-resources",
     "bucket": "hzalaz",
     "remoteBasePath": "js",
-    "majorAndMinor": true,
-    "snapshot": true,
     "snapshotName": "development"
   }
 }

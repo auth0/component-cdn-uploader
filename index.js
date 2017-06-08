@@ -11,7 +11,7 @@ var extend = require('util')._extend;
 
 module.exports = function (options) {
   var logger = new Logger(options);
-  logger.info(`About to upload ${options.name}@${options.version} from '${options.localPath}' to '${options.remoteBasePath}'`);
+  logger.info(`About to upload ${options.name}@${options.version} from '${logger.pretty(options.localPaths)}' to '${options.remoteBasePath}'`);
   logger.debug(`Starting upload process with parameters ${logger.pretty(options)}`);
   var state = Object.assign({ logger: logger }, options);
   var cdn = new CDN(state);
@@ -23,7 +23,7 @@ module.exports = function (options) {
   })
   .flatMap(function(exist) {
     return from(resolver.for(state, exist))
-    .map(function (version) {
+    .flatMap(function (version) {
       return aws.uploader(version, state);
     })
     .concatAll()

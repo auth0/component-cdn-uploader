@@ -13,6 +13,6 @@ module.exports = function (pkgInfo) {
     bucket: config.bucket,
     cdn: config.cdn,
     mainBundleFile: config.mainBundleFile,
-    snapshotName: config.snapshotName || 'development'
+    snapshotName: config.snapshotName
   };
 };

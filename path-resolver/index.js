@@ -32,7 +32,7 @@ var forType = function (options, exists) {
   }
 
   var snapshot = snapshotFrom(options);
-  if (options.type === 'snapshot' || (exists && options.onlyFull)) {
+  if (options.type === 'snapshot' || exists) {
     logger.info(`Uploading snapshot ${options.snapshotName}...`);
     return [snapshot];
   }
