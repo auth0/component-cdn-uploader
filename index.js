@@ -33,7 +33,7 @@ module.exports = function (options) {
 
     return list
     .map(function (version) {
-      return aws.uploader(version, options).concat(cdn.purge(version.remotePath));
+      return aws.uploader(version, options);
     })
     .concatAll()
     .tap(

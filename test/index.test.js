@@ -29,17 +29,13 @@ describe('uploader', function () {
       uploader: function (version, opts) {
         expect(version.remotePath).to.eql('js/component/development');
         expect(opts).to.eql(options);
+        done();
         return Rx.Observable.just('lock.js');
       }
     };
     var alwaysExist = function () {
       this.exists = function () {
         return Rx.Observable.just(true);
-      };
-      this.purge = function (remotePath) {
-        expect(remotePath).to.eql('js/component/development');
-        done();
-        return Rx.Observable.empty();
       };
     };
 
@@ -52,17 +48,13 @@ describe('uploader', function () {
       uploader: function (version, opts) {
         expect(version.remotePath).to.eql('js/component/development');
         expect(opts).to.eql(options);
+        done();
         return Rx.Observable.just('lock.js');
       }
     };
     var alwaysExist = function () {
       this.exists = function () {
         return Rx.Observable.just(false);
-      };
-      this.purge = function (remotePath) {
-        expect(remotePath).to.eql('js/component/development');
-        done();
-        return Rx.Observable.empty();
       };
     };
 
@@ -81,9 +73,6 @@ describe('uploader', function () {
       this.exists = function () {
         return Rx.Observable.just(true);
       };
-      this.purge = function (remotePath) {
-        expect.fail(remotePath, 'Should not purge any file in path');
-      };
     };
 
     var uploader = proxyrequire('../index', {'./aws': aws, './cdn': alwaysExist});
@@ -96,17 +85,13 @@ describe('uploader', function () {
       uploader: function (version, opts) {
         expect(version.remotePath).to.eql('js/component/1.2.3');
         expect(opts).to.eql(options);
+        done();
         return Rx.Observable.just('lock.js');
       }
     };
     var doesNotExist = function () {
       this.exists = function () {
         return Rx.Observable.just(false);
-      };
-      this.purge = function (remotePath) {
-        expect(remotePath).to.eql('js/component/1.2.3');
-        done();
-        return Rx.Observable.empty();
       };
     };
 
