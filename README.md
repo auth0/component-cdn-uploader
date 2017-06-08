@@ -46,12 +46,12 @@ $ ccu [options] [directory ...]
 ```
 
 options
-  --type (string) type of upload flow to perform (one of 'default', 'release', 'snapshot')
-  --only-full only upload full major-minor-patch version, ignored if type is 'snapshot'
-  --dry perform a dry run
-  --snapshot-name (string) name used for snapshot. Default is 'development'
-  --silent run in silent mode
-  --trace run with verbose log
+*  --type (string) type of upload flow to perform (one of 'default', 'release', 'snapshot')
+* --only-full only upload full major-minor-patch version, ignored if type is 'snapshot'
+* --dry perform a dry run
+* --snapshot-name (string) name used for snapshot. Default is 'development'
+* --silent run in silent mode
+* --trace run with verbose log
 
 ### types
 
