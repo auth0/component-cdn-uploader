@@ -15,7 +15,8 @@ var uploader = function (version, options) {
       s3Params: {
         Bucket: options.bucket,
         Prefix: version.remotePath,
-        CacheControl: version.cache
+        CacheControl: version.cache,
+        ACL: 'public-read'
       }
     };
     var logger = options.logger;

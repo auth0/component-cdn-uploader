@@ -39,6 +39,7 @@ describe('aws', function () {
       expect(params.s3Params.Bucket).to.eql(options.bucket);
       expect(params.s3Params.Prefix).to.eql('lock/1.2.3');
       expect(params.s3Params.CacheControl).to.eql('max-age=0');
+      expect(params.s3Params.ACL).to.eql('public-read');
       done();
       return new events.EventEmitter();
     };
