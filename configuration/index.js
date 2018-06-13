@@ -5,7 +5,7 @@ module.exports = function (pkgInfo) {
     throw 'Missing configuration options from package.json';
   }
   var config = pkgInfo['ccu'];
-  var sri = config.sri || {};
+  var digest = config.digest || {};
   return {
     name: config.name || pkgInfo.name,
     version: pkgInfo.version,
@@ -15,7 +15,7 @@ module.exports = function (pkgInfo) {
     cdn: config.cdn,
     mainBundleFile: config.mainBundleFile,
     snapshotName: config.snapshotName,
-    hashes: Array.isArray(sri.hashes) ? sri.hashes : [],
-    hashOnly: Array.isArray(sri.extensions) ? sri.extensions : []
+    hashes: Array.isArray(digest.hashes) ? digest.hashes : [],
+    hashOnly: Array.isArray(digest.extensions) ? digest.extensions : []
   };
 };

@@ -19,7 +19,7 @@
     "bucket": "hzalaz",
     "remoteBasePath": "js",
     "snapshotName": "development",
-    "sri": {
+    "digest": {
       "hashes": ["sha384", "sha256"],
       "extensions": [".js", ".css"]
     }

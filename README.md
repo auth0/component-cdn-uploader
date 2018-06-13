@@ -39,6 +39,27 @@ You can also have the following entries
 - name: name of the folder inside `remoteBasePath` that overrides the default from package's name.
 - snapshotName: name of the snapshot version that will override the default `development`
 
+### Files Cryptographic Digest
+
+If you need the digest of the files you upload you can also add inside `ccu` in your `package.json` the following
+
+```json
+"digest": {
+  "hashes": ["sha384"]
+}
+```
+
+This will generate the `sha384` digest of every file to upload and store it in a different file named `<filename>.<hash-method>`. In the case you only need to hash only some files, e.g. JS only
+
+```json
+"digest": {
+  "hashes": ["sha384"],
+  "extensions": [".js"]
+}
+```
+
+> The valid types of digests are `sha256`, `sha384` and `sha512`, if none is specified the tool will generate no digest files.
+
 ## Usage
 
 ```
