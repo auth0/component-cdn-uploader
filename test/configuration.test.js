@@ -30,7 +30,9 @@ describe('configuration', function () {
       bucket: 'hzalaz',
       cdn: 'https://cdn.auth0.com',
       mainBundleFile: 'lock.min.js',
-      snapshotName: undefined
+      snapshotName: undefined,
+      hashes: [],
+      hashOnly: []
     });
   });
 

@@ -9,12 +9,19 @@
   },
   "author": "",
   "license": "ISC",
+  "dependencies": {
+    "@auth0/component-cdn-uploader": "^2.0.0"
+  },
   "ccu": {
     "name": "lock",
     "cdn": "https://cdn.auth0.com",
     "mainBundleFile": "lock.min.js",
     "bucket": "hzalaz",
     "remoteBasePath": "js",
-    "snapshotName": "development"
+    "snapshotName": "development",
+    "digest": {
+      "hashes": ["sha384", "sha256"],
+      "extensions": [".js", ".css"]
+    }
   }
 }

@@ -39,8 +39,11 @@ describe('uploader', function () {
         return Rx.Observable.just(false);
       };
     };
+    var hash = function () {
+      return Rx.Observable.just({});
+    };
 
-    var uploader = proxyrequire('../index', {'./aws': aws, './cdn': doesNotExist});
+    var uploader = proxyrequire('../index', {'./aws': aws, './cdn': doesNotExist, './hash': hash});
     options.snapshot = false;
     uploader(options);
   });
