@@ -8,6 +8,7 @@ var just = Rx.Observable.just;
 var from = Rx.Observable.from;
 var Logger = require('./logger');
 var extend = require('util')._extend;
+var hash = require('./hash');
 
 module.exports = function (options) {
   var logger = new Logger(options);
@@ -15,13 +16,18 @@ module.exports = function (options) {
   logger.debug(`Starting upload process with parameters ${logger.pretty(options)}`);
   var state = Object.assign({ logger: logger }, options);
   var cdn = new CDN(state);
-  cdn.exists(resolver.full(state).remotePath)
-  .tapOnNext(function (exists) {
-    if(exists) {
-      logger.warn(`File ${state.mainBundleFile} exists for version ${state.version}`);
-    }
-  })
-  .flatMap(function(exist) {
+  Rx.Observable.forkJoin([
+    cdn.exists(resolver.full(state).remotePath).tapOnNext(function (exists) {
+      if(exists) {
+        logger.warn(`File ${state.mainBundleFile} exists for version ${state.version}`);
+      }
+    }),
+    hash(state).tapOnNext(function (result) {
+      logger.debug(`File ${result.file} has ${result.method} digest ${result.digest}`);
+    })
+  ])
+  .flatMap(function(result) {
+    const exist = result[0];
     return from(resolver.for(state, exist))
     .flatMap(function (version) {
       return aws.uploader(version, state);
