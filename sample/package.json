@@ -18,6 +18,10 @@
     "mainBundleFile": "lock.min.js",
     "bucket": "hzalaz",
     "remoteBasePath": "js",
-    "snapshotName": "development"
+    "snapshotName": "development",
+    "sri": {
+      "hashes": ["sha384", "sha256"],
+      "extensions": [".js", ".css"]
+    }
   }
 }

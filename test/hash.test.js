@@ -18,7 +18,7 @@ describe('hash', function () {
       './digest': digest
     });
 
-    hash({localPaths: ['build'], dry: true, logger})
+    hash({localPaths: ['build'], dry: true, logger, hashes: ['sha256'], hashOnly: []})
     .doOnNext((value) => {
       expect(value).to.eql(result);
       done();
@@ -34,7 +34,43 @@ describe('hash', function () {
       './digest': digest
     });
 
-    hash({localPaths: ['build'], dry: true, logger})
+    hash({localPaths: ['build'], dry: true, logger, hashes: ['sha256'], hashOnly: []})
+    .map((r) => r.file)
+    .toArray()
+    .doOnNext((value) => {
+      expect(value).to.eql(['file.js']);
+      done();
+    })
+    .subscribe();
+  });
+
+  it('should generate no hash by default', function(done) {
+    const digest = (p) => Rx.Observable.just({file: p, method: 'sha256', digest: 'hash1'});
+    digest.available = ['sha256'];
+    const hash = proxyrequire('../hash', {
+      '../files': { walk: () => Rx.Observable.from(['file.js', 'file.js.sha256']) },
+      './digest': digest
+    });
+
+    hash({localPaths: ['build'], dry: true, logger, hashes: [], hashOnly: []})
+    .map((r) => r.file)
+    .toArray()
+    .doOnNext((value) => {
+      expect(value).to.eql([]);
+      done();
+    })
+    .subscribe();
+  });
+
+  it('should generate hash ignoring specific files', function(done) {
+    const digest = (p) => Rx.Observable.just({file: p, method: 'sha256', digest: 'hash1'});
+    digest.available = ['sha256'];
+    const hash = proxyrequire('../hash', {
+      '../files': { walk: () => Rx.Observable.from(['file.js', 'file.css']) },
+      './digest': digest
+    });
+
+    hash({localPaths: ['build'], dry: true, logger, hashes: ['sha256'], hashOnly: ['.js']})
     .map((r) => r.file)
     .toArray()
     .doOnNext((value) => {
@@ -60,7 +96,7 @@ describe('hash', function () {
       './digest': digest
     });
 
-    hash({localPaths: ['build'], logger})
+    hash({localPaths: ['build'], logger, hashes: ['sha256'], hashOnly: []})
     .doOnNext((value) => {
       expect(value).to.eql(result);
       expect(filePath).to.eql('file.js.sha256');

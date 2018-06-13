@@ -7,14 +7,19 @@ const digest = require('./digest');
 const path = require('path');
 
 module.exports = function(options) {
-  var logger = options.logger;
+  if (options.hashes.length == 0) {
+    return Rx.Observable.empty();
+  }
+  const logger = options.logger;
+  const ignoredExtensions = digest.available.map((d) => `.${d}`);
+  const hashOnly = options.hashOnly;
   logger.debug(`Checking for files to hash in ${options.localPaths}`);
   return from(options.localPaths).map(function (directoryPath) {
     logger.debug(`Starting to hash files in ${directoryPath}`);
     return files.walk(directoryPath)
     .filter((filePath) => {
       const parts = path.parse(filePath);
-      return digest.available.map((d) => `.${d}`).indexOf(parts.ext) == -1;
+      return ignoredExtensions.indexOf(parts.ext) == -1 && (options.hashOnly.length == 0 || options.hashOnly.indexOf(parts.ext) != -1);
     })
     .flatMap((localPath) => {
       return digest(localPath, options)

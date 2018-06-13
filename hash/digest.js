@@ -32,8 +32,9 @@ const digest = (method, file) => {
 };
 
 module.exports = (file, options) => {
+  const digests = availableDigests.filter((d) => options.hashes.length == 0 || options.hashes.indexOf(d) != -1);
   return Rx.Observable
-  .from(availableDigests)
+  .from(digests)
   .flatMap((method) => digest(method, file));
 };
 
