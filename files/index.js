@@ -1,8 +1,10 @@
 'use strict';
 
+const fs = require('fs');
 const walk = require('walk');
 const path = require('path');
 const Rx = require('rx');
+
 
 module.exports = {
   write: (filePath, contents) => fs.writeFileSync(filePath, contents, { encoding:'utf8' }),
