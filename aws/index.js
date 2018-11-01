@@ -2,7 +2,7 @@
 
 var Rx = require('rx');
 var from = Rx.Observable.from;
-var s3 = require('s3');
+var s3 = require('@auth0/s3');
 var walk = require('walk');
 var path = require('path');
 var client = s3.createClient({});

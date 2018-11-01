@@ -25,7 +25,7 @@ describe('aws', function () {
       return client;
     };
 
-    uploader = proxyrequire('../aws', {'s3': s3}).uploader;
+    uploader = proxyrequire('../aws', {'@auth0/s3': s3}).uploader;
   });
 
   it('should return observable', function () {

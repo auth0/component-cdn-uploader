@@ -20,8 +20,14 @@
     "remoteBasePath": "js",
     "snapshotName": "development",
     "digest": {
-      "hashes": ["sha384", "sha256"],
-      "extensions": [".js", ".css"]
+      "hashes": [
+        "sha384",
+        "sha256"
+      ],
+      "extensions": [
+        ".js",
+        ".css"
+      ]
     }
   }
 }
