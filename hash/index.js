@@ -19,7 +19,7 @@ module.exports = function(options) {
     return files.walk(directoryPath)
     .filter((filePath) => {
       const parts = path.parse(filePath);
-      return ignoredExtensions.indexOf(parts.ext) == -1 && (options.hashOnly.length == 0 || options.hashOnly.indexOf(parts.ext) != -1);
+      return ignoredExtensions.indexOf(parts.ext) == -1 && (hashOnly.length == 0 || hashOnly.indexOf(parts.ext) != -1);
     })
     .flatMap((localPath) => {
       return digest(localPath, options)
