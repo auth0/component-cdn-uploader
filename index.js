@@ -26,7 +26,7 @@ module.exports = function (options) {
       }
     })
     .flatMap(function(result) {
-      const exist = result[0];
+      const exist = result;
       return from(resolver.for(state, exist))
       .flatMap(function (version) {
         return aws.uploader(version, state);
