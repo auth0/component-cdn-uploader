@@ -1,23 +1,22 @@
-'use strict';
+const url = require("url");
+const path = require("path");
+const Rx = require("rx");
+const https = require("https");
+const http = require("http");
 
-var url = require('url');
-var path = require('path');
-var Rx = require('rx');
-var request = require('request');
+const exists = function (remote) {
+  const base = path.join(remote, this.mainFile);
+  const location = new URL(url.resolve(this.root, base));
+  const httpModule = location.protocol === "https:" ? https : http;
 
-var exists = function (remote) {
-  var base = path.join(remote, this.mainFile);
-  var location = url.resolve(this.root, base);
   this.logger.info(`Checking if file at ${location} exists`);
   return Rx.Observable.create(function (observer) {
-    request.head(location, function (error, response) {
-      if(error) {
-        observer.onNext(false);
-      } else {
+    httpModule
+      .request(location, { method: "HEAD" }, (res) => {
         observer.onNext(response.statusCode == 200);
-      }
-      observer.onCompleted()
-    });
+      })
+      .on("error", () => observer.onNext(false))
+      .on("close", () => observer.onCompleted());
   });
 };
 
