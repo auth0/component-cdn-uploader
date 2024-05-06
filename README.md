@@ -73,6 +73,7 @@ options
 * --snapshot-name (string) name used for snapshot. Default is 'development'
 * --silent run in silent mode
 * --trace run with verbose log
+* --version-override (string) indicate semantic version number to upload (overrides package.json version)
 
 ### types
 
