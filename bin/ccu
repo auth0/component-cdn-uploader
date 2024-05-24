@@ -17,11 +17,12 @@ var cli = meow(`
     --snapshot-name (string) name used for snapshot. Default is 'development'
     --silent run in silent mode
     --trace run with verbose log
+    --version-override (string) indicate semantic version number to upload (overrides package.json version)
 
   Examples
   $ ccu dist
 `, {
-  string: ['type', 'snapshotName'],
+  string: ['type', 'snapshotName', 'versionOverride'],
   boolean: ['dry', 'onlyFull', 'silent', 'trace'],
   alias: {
     t: 'type',
@@ -52,5 +53,6 @@ var levels = ['debug', 'info', 'warn', 'error', 'success']
   });
 options.logLevels = levels;
 options.snapshotName = cli.flags.snapshotName || options.snapshotName;
+options.version = cli.flags.versionOverride || options.version;
 
 upload(options);
