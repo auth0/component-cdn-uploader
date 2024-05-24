@@ -44,4 +44,7 @@ jspm_packages
 *.tgz.idea/
 
 .idea/
+
+# ignore lock files since this is a lib
 package-lock.json
+yarn.lock
