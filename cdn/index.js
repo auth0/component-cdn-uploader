@@ -17,6 +17,10 @@ var exists = function (remote) {
         observer.onCompleted();
       })
       .catch(error => {
+        this.logger.debug(`Failed to check file existence at ${location}: ${error.message}`);
+        observer.onNext(false);
+        observer.onCompleted();
+      });
         observer.onNext(false);
         observer.onCompleted();
       });
