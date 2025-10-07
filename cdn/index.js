@@ -3,21 +3,27 @@
 var url = require('url');
 var path = require('path');
 var Rx = require('rx');
-var request = require('request');
 
 var exists = function (remote) {
-  var base = path.join(remote, this.mainFile);
-  var location = url.resolve(this.root, base);
+  const base = path.join(remote, this.mainFile);
+  const location = url.resolve(this.root, base);
+
   this.logger.info(`Checking if file at ${location} exists`);
-  return Rx.Observable.create(function (observer) {
-    request.head(location, function (error, response) {
-      if(error) {
+
+  return Rx.Observable.create(observer => {
+    fetch(location, { method: 'HEAD' })
+      .then(response => {
+        observer.onNext(response.status === 200);
+        observer.onCompleted();
+      })
+      .catch(error => {
+        this.logger.debug(`Failed to check file existence at ${location}: ${error.message}`);
         observer.onNext(false);
-      } else {
-        observer.onNext(response.statusCode == 200);
-      }
-      observer.onCompleted()
-    });
+        observer.onCompleted();
+      });
+        observer.onNext(false);
+        observer.onCompleted();
+      });
   });
 };
 
