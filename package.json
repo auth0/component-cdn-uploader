@@ -1,10 +1,14 @@
 {
   "name": "@auth0/component-cdn-uploader",
-  "version": "2.3.0",
+  "version": "2.4.0",
   "description": "",
   "repository": {
     "type": "git",
     "url": "https://github.com/auth0/component-cdn-uploader"
+  },
+  "homepage": "https://github.com/auth0/component-cdn-uploader/blob/master/README.md",
+  "publishConfig": {
+    "access": "public"
   },
   "main": "index.js",
   "scripts": {
