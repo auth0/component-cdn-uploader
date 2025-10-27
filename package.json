@@ -6,6 +6,10 @@
     "type": "git",
     "url": "https://github.com/auth0/component-cdn-uploader"
   },
+  "homepage": "https://github.com/auth0/component-cdn-uploader/blob/master/README.md",
+  "publishConfig": {
+    "access": "public"
+  },
   "main": "index.js",
   "scripts": {
     "test": "mocha --recursive test",
