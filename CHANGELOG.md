@@ -1,5 +1,11 @@
 # Change Log
 
+## [v2.4.1](https://github.com/auth0/component-cdn-uploader/tree/v2.4.1) (2025-11-21)
+[Full Changelog](https://github.com/auth0/component-cdn-uploader/compare/v2.4.0...v2.4.1)
+
+**Added**
+- fix: syntax error in cdn/index.js causing ccu to fail [\#29](https://github.com/auth0/component-cdn-uploader/pull/29) ([yogeshchoudhary147](https://github.com/yogeshchoudhary147))
+
 ## [v2.4.0](https://github.com/auth0/component-cdn-uploader/tree/v2.4.0) (2025-10-27)
 
 **Added**
