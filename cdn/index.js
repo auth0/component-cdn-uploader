@@ -21,9 +21,6 @@ var exists = function (remote) {
         observer.onNext(false);
         observer.onCompleted();
       });
-        observer.onNext(false);
-        observer.onCompleted();
-      });
   });
 };
 
