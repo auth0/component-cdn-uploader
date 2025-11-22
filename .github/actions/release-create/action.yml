@@ -1,47 +1,47 @@
-name: Publish release to npm
+name: Create a GitHub release
+
+#
+# Creates a GitHub release with the given version.
+#
+# TODO: Remove once the common repo is public.
+#
 
 inputs:
-  node-version:
+  token:
     required: true
-  npm-token:
+  files:
+    required: false
+  name:
     required: true
-  version:
+  body:
     required: true
-  require-build:
+  tag:
+    required: true
+  commit:
+    required: true
+  draft:
+    default: false
+    required: false
+  prerelease:
+    default: false
+    required: false
+  fail_on_unmatched_files:
     default: true
-  release-directory:
-    default: './'
+    required: false
 
 runs:
   using: composite
+
   steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-
-    - name: Setup Node
-      uses: actions/setup-node@v4
+    - uses: softprops/action-gh-release@de2c0eb89ae2a093876385947365aca7b0e5f844
       with:
-        node-version: ${{ inputs.node-version }}
-        cache: 'npm'
-        registry-url: 'https://registry.npmjs.org'
-
-    - name: Install dependencies
-      if: inputs.require-build == 'true'
-      shell: bash
-      run: npm ci --include=dev
-
-    - name: Publish release to NPM
-      shell: bash
-      working-directory: ${{ inputs.release-directory }}
-      run: |
-        if [[ "${VERSION}" == *"beta"* ]]; then
-          TAG="beta"
-        elif [[ "${VERSION}" == *"alpha"* ]]; then
-          TAG="alpha"
-        else
-          TAG="latest"
-        fi
-        npm publish --provenance --tag $TAG
+        body: ${{ inputs.body }}
+        name: ${{ inputs.name }}
+        tag_name: ${{ inputs.tag }}
+        target_commitish: ${{ inputs.commit }}
+        draft: ${{ inputs.draft }}
+        prerelease: ${{ inputs.prerelease }}
+        fail_on_unmatched_files: ${{ inputs.fail_on_unmatched_files }}
+        files: ${{ inputs.files }}
       env:
-        NODE_AUTH_TOKEN: ${{ inputs.npm-token }}
-        VERSION: ${{ inputs.version }}
+        GITHUB_TOKEN: ${{ inputs.token }}
