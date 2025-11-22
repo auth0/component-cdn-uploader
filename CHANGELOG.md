@@ -1,5 +1,11 @@
 # Change Log
 
+## [v2.4.2](https://github.com/auth0/component-cdn-uploader/tree/v2.4.2) (2025-11-22)
+[Full Changelog](https://github.com/auth0/component-cdn-uploader/compare/v2.4.1...v2.4.2)
+
+**Fixed**
+- Fix release-create action to properly create GitHub releases [\#31](https://github.com/auth0/component-cdn-uploader/pull/31) ([yogeshchoudhary147](https://github.com/yogeshchoudhary147))
+
 ## [v2.4.1](https://github.com/auth0/component-cdn-uploader/tree/v2.4.1) (2025-11-21)
 [Full Changelog](https://github.com/auth0/component-cdn-uploader/compare/v2.4.0...v2.4.1)
 
