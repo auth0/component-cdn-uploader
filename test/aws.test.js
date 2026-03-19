@@ -83,10 +83,12 @@ describe('aws', function () {
 
   it('should complete stream when upload ends', function (done) {
     uploader({remotePath: 'lock/1.2.3', cache: 'max-age=0'}, options)
+      .concatAll()
+      .toArray()
       .tapOnCompleted(function () {
         done();
       })
-      .subscribe();
+      .subscribe(function () {}, function () {});
   });
 
 });
