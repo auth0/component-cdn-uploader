@@ -51,6 +51,30 @@ describe('aws', function () {
         expect(sentCommands[0].params.Key).to.eql('lock/1.2.3/lock.js');
         expect(sentCommands[0].params.CacheControl).to.eql('max-age=0');
         expect(sentCommands[0].params.ACL).to.eql('public-read');
+        expect(sentCommands[0].params.ContentType).to.eql('application/javascript');
+        expect(sentCommands[1].params.Key).to.eql('lock/1.2.3/lock.css');
+        expect(sentCommands[1].params.ContentType).to.eql('text/css');
+        done();
+      });
+  });
+
+  it('should use application/octet-stream for unknown file types', function (done) {
+    var mockFilesModuleUnknown = {
+      walk: function () { return Rx.Observable.from(['build/lock.unknownext']); }
+    };
+    var MockS3Client = function () { return mockS3Client; };
+    var MockPutObjectCommand = function (params) { this.params = params; };
+    var uploaderUnknown = proxyrequire('../aws', {
+      '@aws-sdk/client-s3': { S3Client: MockS3Client, PutObjectCommand: MockPutObjectCommand },
+      '../files': mockFilesModuleUnknown,
+      'fs': { createReadStream: function (f) { return f; } }
+    }).uploader;
+
+    uploaderUnknown({remotePath: 'lock/1.2.3', cache: 'max-age=0'}, options)
+      .concatAll()
+      .toArray()
+      .subscribe(function () {
+        expect(sentCommands[0].params.ContentType).to.eql('application/octet-stream');
         done();
       });
   });

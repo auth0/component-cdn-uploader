@@ -14,7 +14,7 @@ var uploader = function (version, options) {
     var logger = options.logger;
     var uploadConfig = {
       Bucket: options.bucket,
-      RemotePath: version.remotePath,
+      remotePath: version.remotePath,
       CacheControl: version.cache,
       ACL: 'public-read'
     };
