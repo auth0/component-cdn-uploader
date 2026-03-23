@@ -2,80 +2,117 @@
 
 var expect = require('chai').expect;
 var proxyrequire = require('proxyquire');
-var events = require('events');
-var s3 = {};
 var Rx = require('rx');
 var Logger = require('../logger');
 
 describe('aws', function () {
 
-  var client, uploader, emitter;
+  var uploader;
   var logger = new Logger({logLevels: []});
   var options = {localPaths: ['build'], bucket: 'auth0', logger: logger};
+  var mockFiles = ['build/lock.js', 'build/lock.css'];
+  var sentCommands;
+  var mockS3Client;
 
   beforeEach(function () {
-    emitter = new events.EventEmitter();
-    client = {
-        uploadDir: function () {
-          return emitter;
-        }
+    sentCommands = [];
+    mockS3Client = {
+      send: function (command) {
+        sentCommands.push(command);
+        return Promise.resolve({});
+      }
     };
 
-    s3.createClient = function () {
-      return client;
+    var MockS3Client = function () { return mockS3Client; };
+    var MockPutObjectCommand = function (params) { this.params = params; };
+
+    var mockFilesModule = {
+      walk: function () { return Rx.Observable.from(mockFiles); }
     };
 
-    uploader = proxyrequire('../aws', {'@auth0/s3': s3}).uploader;
+    uploader = proxyrequire('../aws', {
+      '@aws-sdk/client-s3': { S3Client: MockS3Client, PutObjectCommand: MockPutObjectCommand },
+      '../files': mockFilesModule,
+      'fs': { createReadStream: function (f) { return f; } }
+    }).uploader;
   });
 
   it('should return observable', function () {
     expect(uploader({remotePath: 'lock/1.2.3', cache: 'max-age=0'}, options)).to.be.instanceOf(Rx.Observable);
   });
 
-  it('should start upload with correct params', function (done) {
-    client.uploadDir = function (params) {
-      expect(params.localDir).to.be.eql(options.localPaths[0]);
-      expect(params.deleteRemoved).to.be.false;
-      expect(params.s3Params.Bucket).to.eql(options.bucket);
-      expect(params.s3Params.Prefix).to.eql('lock/1.2.3');
-      expect(params.s3Params.CacheControl).to.eql('max-age=0');
-      expect(params.s3Params.ACL).to.eql('public-read');
-      done();
-      return new events.EventEmitter();
+  it('should upload files with correct params', function (done) {
+    uploader({remotePath: 'lock/1.2.3', cache: 'max-age=0'}, options)
+      .concatAll()
+      .toArray()
+      .subscribe(function () {
+        expect(sentCommands).to.have.lengthOf(2);
+        expect(sentCommands[0].params.Bucket).to.eql('auth0');
+        expect(sentCommands[0].params.Key).to.eql('lock/1.2.3/lock.js');
+        expect(sentCommands[0].params.CacheControl).to.eql('max-age=0');
+        expect(sentCommands[0].params.ACL).to.eql('public-read');
+        expect(sentCommands[0].params.ContentType).to.eql('application/javascript');
+        expect(sentCommands[1].params.Key).to.eql('lock/1.2.3/lock.css');
+        expect(sentCommands[1].params.ContentType).to.eql('text/css');
+        done();
+      });
+  });
+
+  it('should use application/octet-stream for unknown file types', function (done) {
+    var mockFilesModuleUnknown = {
+      walk: function () { return Rx.Observable.from(['build/lock.unknownext']); }
     };
-    uploader({remotePath: 'lock/1.2.3', cache: 'max-age=0'}, options).concatAll().subscribe();
+    var MockS3Client = function () { return mockS3Client; };
+    var MockPutObjectCommand = function (params) { this.params = params; };
+    var uploaderUnknown = proxyrequire('../aws', {
+      '@aws-sdk/client-s3': { S3Client: MockS3Client, PutObjectCommand: MockPutObjectCommand },
+      '../files': mockFilesModuleUnknown,
+      'fs': { createReadStream: function (f) { return f; } }
+    }).uploader;
+
+    uploaderUnknown({remotePath: 'lock/1.2.3', cache: 'max-age=0'}, options)
+      .concatAll()
+      .toArray()
+      .subscribe(function () {
+        expect(sentCommands[0].params.ContentType).to.eql('application/octet-stream');
+        done();
+      });
   });
 
   it('should relay errors', function (done) {
     var expected = new Error('MOCK');
+    mockS3Client.send = function () { return Promise.reject(expected); };
     uploader({remotePath: 'lock/1.2.3', cache: 'max-age=0'}, options)
-    .concatAll()
-    .tapOnError(function (error) {
-      expect(error).to.eql(expected);
-      done();
-    })
-    .subscribe();
-    emitter.emit('error', expected);
+      .concatAll()
+      .tapOnError(function (error) {
+        expect(error).to.eql(expected);
+        done();
+      })
+      .subscribe(function () {}, function () {});
   });
 
-  it('should relay file upload started', function (done) {
+  it('should emit file keys on upload', function (done) {
+    var uploaded = [];
     uploader({remotePath: 'lock/1.2.3', cache: 'max-age=0'}, options)
-    .concatAll()
-    .tapOnNext(function (file) {
-      expect(file).to.eql('lock.js');
-      done();
-    })
-    .subscribe();
-    emitter.emit('fileUploadStart', 'lock/1.2.3', 'lock.js');
+      .concatAll()
+      .subscribe(
+        function (key) { uploaded.push(key); },
+        function () {},
+        function () {
+          expect(uploaded).to.include('lock/1.2.3/lock.js');
+          done();
+        }
+      );
   });
 
   it('should complete stream when upload ends', function (done) {
     uploader({remotePath: 'lock/1.2.3', cache: 'max-age=0'}, options)
-    .tapOnCompleted(function () {
-      done();
-    })
-    .subscribe();
-    emitter.emit('end');
+      .concatAll()
+      .toArray()
+      .tapOnCompleted(function () {
+        done();
+      })
+      .subscribe(function () {}, function () {});
   });
 
 });
