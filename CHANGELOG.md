@@ -3,8 +3,8 @@
 ## [v2.5.0](https://github.com/auth0/component-cdn-uploader/tree/v2.5.0) (2026-03-24)
 [Full Changelog](https://github.com/auth0/component-cdn-uploader/compare/v2.4.2...v2.5.0)
 
-**Removed**
-- Replace @auth0/s3 / aws-sdk v2 with @aws-sdk/client-s3 v3 [\#33](https://github.com/auth0/component-cdn-uploader/pull/33) ([yogeshchoudhary147](https://github.com/yogeshchoudhary147))
+**⚠️ BREAKING CHANGES**
+- Node.js minimum version bumped to >=20.0.0 (previously >=18.0.0) [\#33](https://github.com/auth0/component-cdn-uploader/pull/33) ([yogeshchoudhary147](https://github.com/yogeshchoudhary147))
 
 ## [v2.4.3](https://github.com/auth0/component-cdn-uploader/tree/v2.4.3) (2026-03-24)
 [Full Changelog](https://github.com/auth0/component-cdn-uploader/compare/v2.4.2...v2.4.3)
