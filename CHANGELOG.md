@@ -1,5 +1,11 @@
 # Change Log
 
+## [v2.5.0](https://github.com/auth0/component-cdn-uploader/tree/v2.5.0) (2026-03-24)
+[Full Changelog](https://github.com/auth0/component-cdn-uploader/compare/v2.4.2...v2.5.0)
+
+**Added**
+- Replace @auth0/s3 / aws-sdk v2 with @aws-sdk/client-s3 v3 [\#33](https://github.com/auth0/component-cdn-uploader/pull/33) ([yogeshchoudhary147](https://github.com/yogeshchoudhary147))
+
 ## [v2.4.2](https://github.com/auth0/component-cdn-uploader/tree/v2.4.2) (2025-11-22)
 [Full Changelog](https://github.com/auth0/component-cdn-uploader/compare/v2.4.1...v2.4.2)
 
