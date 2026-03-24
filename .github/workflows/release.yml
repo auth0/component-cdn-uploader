@@ -7,9 +7,9 @@ on:
   workflow_dispatch:
     inputs:
       node-version:
-        description: 'Node.js version to use (should be >=18)'
+        description: 'Node.js version to use (should be >=20)'
         required: false
-        default: '18'
+        default: '20'
 
 permissions:
   contents: write
@@ -19,7 +19,7 @@ jobs:
   release:
     uses: ./.github/workflows/npm-release.yml
     with:
-      node-version: ${{ github.event.inputs.node-version || '18' }}
+      node-version: ${{ github.event.inputs.node-version || '20' }}
       require-build: true
     secrets:
       npm-token: ${{ secrets.NPM_TOKEN }}
