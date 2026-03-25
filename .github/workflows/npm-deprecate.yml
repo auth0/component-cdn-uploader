@@ -1,0 +1,21 @@
+name: Deprecate npm release
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deprecate:
+    runs-on: ubuntu-latest
+    environment: release
+    permissions:
+      id-token: write
+
+    steps:
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Deprecate 2.5.0
+        run: npm deprecate @auth0/component-cdn-uploader@2.5.0 "broken release, use 2.4.2"
