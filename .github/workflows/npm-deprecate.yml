@@ -1,0 +1,29 @@
+name: Deprecate npm release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to deprecate (e.g. 2.5.0)'
+        required: true
+      message:
+        description: 'Deprecation message'
+        required: true
+        default: 'broken release, use 2.4.2'
+
+jobs:
+  deprecate:
+    runs-on: ubuntu-latest
+    environment: release
+    permissions:
+      id-token: write
+
+    steps:
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Deprecate version
+        run: npm deprecate @auth0/component-cdn-uploader@${{ github.event.inputs.version }} "${{ github.event.inputs.message }}"
