@@ -21,3 +21,5 @@ jobs:
 
       - name: Deprecate 2.5.0
         run: npm deprecate @auth0/component-cdn-uploader@2.5.0 "broken release, use 2.4.2"
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
