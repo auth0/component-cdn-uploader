@@ -1,5 +1,11 @@
 # Change Log
 
+## [v3.0.0](https://github.com/auth0/component-cdn-uploader/tree/v3.0.0) (2026-03-25)
+[Full Changelog](https://github.com/auth0/component-cdn-uploader/compare/v2.5.0...v3.0.0)
+
+**Added**
+- Fix S3 PermanentRedirect error on regional buckets [\#40](https://github.com/auth0/component-cdn-uploader/pull/40) ([yogeshchoudhary147](https://github.com/yogeshchoudhary147))
+
 ## [v2.5.0](https://github.com/auth0/component-cdn-uploader/tree/v2.5.0) (2026-03-24)
 [Full Changelog](https://github.com/auth0/component-cdn-uploader/compare/v2.4.2...v2.5.0)
 
