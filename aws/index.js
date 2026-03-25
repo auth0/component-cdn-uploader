@@ -7,9 +7,8 @@ var fs = require('fs');
 var mime = require('mime');
 var files = require('../files');
 
-var client = new S3Client({});
-
 var uploader = function (version, options) {
+  var client = new S3Client({ followRegionRedirects: true });
   return from(options.localPaths).map(function (directoryPath) {
     var logger = options.logger;
     var uploadConfig = {
