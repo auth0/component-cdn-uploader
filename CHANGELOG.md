@@ -1,5 +1,35 @@
 # Change Log
 
+## [v3.0.2](https://github.com/auth0/component-cdn-uploader/tree/v3.0.2) (2026-03-26)
+[Full Changelog](https://github.com/auth0/component-cdn-uploader/compare/v3.0.1...v3.0.2)
+
+**Fixed**
+- Fix S3 upload RequestTimeout by using Buffer instead of stream [\#48](https://github.com/auth0/component-cdn-uploader/pull/48) ([yogeshchoudhary147](https://github.com/yogeshchoudhary147))
+
+## [v3.0.1](https://github.com/auth0/component-cdn-uploader/tree/v3.0.1) (2026-03-26)
+[Full Changelog](https://github.com/auth0/component-cdn-uploader/compare/v3.0.0...v3.0.1)
+
+**Fixed**
+- Fix S3 upload error by setting requestChecksumCalculation to WHEN_REQUIRED [\#46](https://github.com/auth0/component-cdn-uploader/pull/46) ([yogeshchoudhary147](https://github.com/yogeshchoudhary147))
+
+## [v3.0.0](https://github.com/auth0/component-cdn-uploader/tree/v3.0.0) (2026-03-25)
+[Full Changelog](https://github.com/auth0/component-cdn-uploader/compare/v2.5.0...v3.0.0)
+
+**Added**
+- Fix S3 PermanentRedirect error on regional buckets [\#40](https://github.com/auth0/component-cdn-uploader/pull/40) ([yogeshchoudhary147](https://github.com/yogeshchoudhary147))
+
+## [v2.5.0](https://github.com/auth0/component-cdn-uploader/tree/v2.5.0) (2026-03-24)
+[Full Changelog](https://github.com/auth0/component-cdn-uploader/compare/v2.4.2...v2.5.0)
+
+**⚠️ BREAKING CHANGES**
+- Node.js minimum version bumped to >=20.0.0 (previously >=18.0.0) [\#33](https://github.com/auth0/component-cdn-uploader/pull/33) ([yogeshchoudhary147](https://github.com/yogeshchoudhary147))
+
+## [v2.4.3](https://github.com/auth0/component-cdn-uploader/tree/v2.4.3) (2026-03-24)
+[Full Changelog](https://github.com/auth0/component-cdn-uploader/compare/v2.4.2...v2.4.3)
+
+**Replaced**
+- Replace @auth0/s3 / aws-sdk v2 with @aws-sdk/client-s3 v3 [\#33](https://github.com/auth0/component-cdn-uploader/pull/33) ([yogeshchoudhary147](https://github.com/yogeshchoudhary147))
+
 ## [v2.4.2](https://github.com/auth0/component-cdn-uploader/tree/v2.4.2) (2025-11-22)
 [Full Changelog](https://github.com/auth0/component-cdn-uploader/compare/v2.4.1...v2.4.2)
 
