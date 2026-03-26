@@ -26,11 +26,12 @@ var uploader = function (version, options) {
     logger.debug(`Starting upload with following S3 config ${logger.pretty(uploadConfig)}`);
     return files.walk(directoryPath).flatMap(function (localFile) {
       var key = localFile.replace(directoryPath, version.remotePath);
+      var body = fs.readFileSync(localFile);
       return Rx.Observable.create(function (observer) {
         client.send(new PutObjectCommand({
           Bucket: options.bucket,
           Key: key,
-          Body: fs.createReadStream(localFile),
+          Body: body,
           ContentType: mime.getType(localFile) || 'application/octet-stream',
           CacheControl: version.cache,
           ACL: 'public-read'

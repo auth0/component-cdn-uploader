@@ -33,7 +33,7 @@ describe('aws', function () {
     uploader = proxyrequire('../aws', {
       '@aws-sdk/client-s3': { S3Client: MockS3Client, PutObjectCommand: MockPutObjectCommand },
       '../files': mockFilesModule,
-      'fs': { createReadStream: function (f) { return f; } }
+      'fs': { readFileSync: function (f) { return Buffer.from(f); } }
     }).uploader;
   });
 
@@ -62,6 +62,7 @@ describe('aws', function () {
         expect(sentCommands[0].params.CacheControl).to.eql('max-age=0');
         expect(sentCommands[0].params.ACL).to.eql('public-read');
         expect(sentCommands[0].params.ContentType).to.eql('application/javascript');
+        expect(Buffer.isBuffer(sentCommands[0].params.Body)).to.eql(true);
         expect(sentCommands[1].params.Key).to.eql('lock/1.2.3/lock.css');
         expect(sentCommands[1].params.ContentType).to.eql('text/css');
         done();
@@ -77,7 +78,7 @@ describe('aws', function () {
     var uploaderUnknown = proxyrequire('../aws', {
       '@aws-sdk/client-s3': { S3Client: MockS3Client, PutObjectCommand: MockPutObjectCommand },
       '../files': mockFilesModuleUnknown,
-      'fs': { createReadStream: function (f) { return f; } }
+      'fs': { readFileSync: function (f) { return Buffer.from(f); } }
     }).uploader;
 
     uploaderUnknown({remotePath: 'lock/1.2.3', cache: 'max-age=0'}, options)
