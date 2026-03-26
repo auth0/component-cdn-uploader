@@ -1,5 +1,11 @@
 # Change Log
 
+## [v3.0.2](https://github.com/auth0/component-cdn-uploader/tree/v3.0.2) (2026-03-26)
+[Full Changelog](https://github.com/auth0/component-cdn-uploader/compare/v3.0.1...v3.0.2)
+
+**Fixed**
+- Fix S3 upload RequestTimeout by using Buffer instead of stream [\#48](https://github.com/auth0/component-cdn-uploader/pull/48) ([yogeshchoudhary147](https://github.com/yogeshchoudhary147))
+
 ## [v3.0.1](https://github.com/auth0/component-cdn-uploader/tree/v3.0.1) (2026-03-26)
 [Full Changelog](https://github.com/auth0/component-cdn-uploader/compare/v3.0.0...v3.0.1)
 
