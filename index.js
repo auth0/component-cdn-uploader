@@ -33,7 +33,7 @@ module.exports = function (options) {
       })
       .concatAll()
       .doOnNext(function (file) {
-        logger.info(`Uploaded file ${file}`);
+        logger.info(`Uploading file ${file}`);
       })
       .doOnError(function (error) {
         logger.error('Unable to upload:', error);

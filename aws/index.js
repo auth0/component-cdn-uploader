@@ -2,51 +2,47 @@
 
 var Rx = require('rx');
 var from = Rx.Observable.from;
-var { S3Client, PutObjectCommand } = require('@aws-sdk/client-s3');
-var fs = require('fs');
-var mime = require('mime');
+var s3 = require('@auth0/s3');
+var walk = require('walk');
+var path = require('path');
+var client = s3.createClient({});
 var files = require('../files');
 
 var uploader = function (version, options) {
-  var client = new S3Client({ followRegionRedirects: true, requestChecksumCalculation: 'WHEN_REQUIRED' });
   return from(options.localPaths).map(function (directoryPath) {
-    var logger = options.logger;
-    var uploadConfig = {
-      Bucket: options.bucket,
-      remotePath: version.remotePath,
-      CacheControl: version.cache,
-      ACL: 'public-read'
+    var params = {
+      localDir: directoryPath,
+      deleteRemoved: false,
+      s3Params: {
+        Bucket: options.bucket,
+        Prefix: version.remotePath,
+        CacheControl: version.cache,
+        ACL: 'public-read'
+      }
     };
+    var logger = options.logger;
     if (options.dry) {
-      logger.debug(`Starting upload with following S3 config ${logger.pretty(uploadConfig)}`);
+      logger.debug(`Starting upload with following S3 config ${logger.pretty(params)}`);
       return files
-        .walk(directoryPath)
-        .map((localFile) => localFile.replace(directoryPath, version.remotePath));
+      .walk(params.localDir)
+      .map((localFile) => localFile.replace(directoryPath, version.remotePath));
     }
-    logger.debug(`Starting upload with following S3 config ${logger.pretty(uploadConfig)}`);
-    return files.walk(directoryPath).flatMap(function (localFile) {
-      var key = localFile.replace(directoryPath, version.remotePath);
-      var body = fs.readFileSync(localFile);
-      return Rx.Observable.create(function (observer) {
-        client.send(new PutObjectCommand({
-          Bucket: options.bucket,
-          Key: key,
-          Body: body,
-          ContentType: mime.getType(localFile) || 'application/octet-stream',
-          CacheControl: version.cache,
-          ACL: 'public-read'
-        }))
-          .then(function () {
-            observer.onNext(key);
-            observer.onCompleted();
-          })
-          .catch(function (err) {
-            observer.onError(err);
-          });
-        return function () {};
+    return Rx.Observable.create(function (observer) {
+      logger.debug(`Starting upload with following S3 config ${logger.pretty(params)}`);
+      var uploader = client.uploadDir(params);
+      uploader.on('error', function(err) {
+        observer.onError(err);
       });
-    }, 5);
+      uploader.on('fileUploadStart', function (path, key) {
+        observer.onNext(key);
+      });
+      uploader.on('end', function() {
+        observer.onCompleted();
+      });
+      return function() {};
+    });
   });
+
 };
 
 module.exports = {
