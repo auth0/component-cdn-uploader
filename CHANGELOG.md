@@ -18,6 +18,12 @@
 **Added**
 - Fix S3 PermanentRedirect error on regional buckets [\#40](https://github.com/auth0/component-cdn-uploader/pull/40) ([yogeshchoudhary147](https://github.com/yogeshchoudhary147))
 
+## [v2.5.1](https://github.com/auth0/component-cdn-uploader/tree/v2.5.1) (2026-03-26)
+[Full Changelog](https://github.com/auth0/component-cdn-uploader/compare/v2.5.0...v2.5.1)
+
+**Fixed**
+- Rollback breaking changes from v2.5.0: revert AWS SDK v2→v3 migration back to `@auth0/s3` and restore Node `>=18` engine requirement [\#51](https://github.com/auth0/component-cdn-uploader/pull/51) ([yogeshchoudhary147](https://github.com/yogeshchoudhary147))
+
 ## [v2.5.0](https://github.com/auth0/component-cdn-uploader/tree/v2.5.0) (2026-03-24)
 [Full Changelog](https://github.com/auth0/component-cdn-uploader/compare/v2.4.2...v2.5.0)
 
