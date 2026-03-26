@@ -23,7 +23,7 @@ describe('aws', function () {
       }
     };
 
-    var MockS3Client = function () { return mockS3Client; };
+    var MockS3Client = function (config) { mockS3Client.config = config; return mockS3Client; };
     var MockPutObjectCommand = function (params) { this.params = params; };
 
     var mockFilesModule = {
@@ -39,6 +39,16 @@ describe('aws', function () {
 
   it('should return observable', function () {
     expect(uploader({remotePath: 'lock/1.2.3', cache: 'max-age=0'}, options)).to.be.instanceOf(Rx.Observable);
+  });
+
+  it('should initialize S3Client with requestChecksumCalculation WHEN_REQUIRED', function (done) {
+    uploader({remotePath: 'lock/1.2.3', cache: 'max-age=0'}, options)
+      .concatAll()
+      .toArray()
+      .subscribe(function () {
+        expect(mockS3Client.config.requestChecksumCalculation).to.eql('WHEN_REQUIRED');
+        done();
+      });
   });
 
   it('should upload files with correct params', function (done) {
