@@ -1,5 +1,11 @@
 # Change Log
 
+## [v3.0.1](https://github.com/auth0/component-cdn-uploader/tree/v3.0.1) (2026-03-26)
+[Full Changelog](https://github.com/auth0/component-cdn-uploader/compare/v3.0.0...v3.0.1)
+
+**Fixed**
+- Fix S3 upload error by setting requestChecksumCalculation to WHEN_REQUIRED [\#46](https://github.com/auth0/component-cdn-uploader/pull/46) ([yogeshchoudhary147](https://github.com/yogeshchoudhary147))
+
 ## [v3.0.0](https://github.com/auth0/component-cdn-uploader/tree/v3.0.0) (2026-03-25)
 [Full Changelog](https://github.com/auth0/component-cdn-uploader/compare/v2.5.0...v3.0.0)
 
